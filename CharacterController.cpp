@@ -20,8 +20,8 @@ ACharacterController::ACharacterController()
 	Gravity->OnEnterGravity.AddDynamic(this, &ACharacterController::EnterGravity);
 	Gravity->OnExitGravity.AddDynamic(this, &ACharacterController::ExitGravity);
 
-	MovementCharacter = CreateDefaultSubobject<UMovementCharacter>(TEXT("MovementComponent"));
-	MovementCharacter->UpdatedComponent = RootComponent;
+	MovementController = CreateDefaultSubobject<UMovementController>(TEXT("MovementComponent"));
+	MovementController->UpdatedComponent = RootComponent;
 }
 
 // Called when the game starts or when spawned
@@ -66,22 +66,22 @@ void ACharacterController::LookUpAtRate(float Rate) {
 
 
 void ACharacterController::MoveForward(float AxisValue) {
-	if (MovementCharacter && (MovementCharacter->UpdatedComponent == RootComponent))
+	if (MovementController && (MovementController->UpdatedComponent == RootComponent))
 	{
-		MovementCharacter->AddInputVector(FVector::ForwardVector * AxisValue);
+		MovementController->AddInputVector(FVector::ForwardVector * AxisValue);
 	}
 }
 
 void ACharacterController::MoveRight(float AxisValue) {
-	if (MovementCharacter && (MovementCharacter->UpdatedComponent == RootComponent))
+	if (MovementController && (MovementController->UpdatedComponent == RootComponent))
 	{
-		MovementCharacter->AddInputVector(FVector::RightVector * AxisValue);
+		MovementController->AddInputVector(FVector::RightVector * AxisValue);
 	}
 }
 
 void ACharacterController::MoveUp(float AxisValue) {
-	if (MovementCharacter && (MovementCharacter->UpdatedComponent == RootComponent))
+	if (MovementController && (MovementController->UpdatedComponent == RootComponent))
 	{
-		MovementCharacter->AddInputVector(FVector::UpVector * AxisValue);
+		MovementController->AddInputVector(FVector::UpVector * AxisValue);
 	}
 }

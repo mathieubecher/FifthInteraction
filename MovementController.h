@@ -4,13 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PawnMovementComponent.h"
-#include "MovementCharacter.generated.h"
+#include "MovementController.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
-class FIFTHINTERACTION_API UMovementCharacter : public UPawnMovementComponent
+class FIFTHINTERACTION_API UMovementController : public UPawnMovementComponent
 {
 	GENERATED_BODY()
 

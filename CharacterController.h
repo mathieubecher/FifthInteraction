@@ -7,7 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Pawn.h"
 #include "MovementGravityAffected.h"
-#include "MovementCharacter.h"
+#include "MovementController.h"
 #include "CharacterController.generated.h"
 
 UCLASS()
@@ -24,7 +24,7 @@ protected:
 	class UMovementGravityAffected * Gravity;
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
-	class UMovementCharacter * MovementCharacter;
+	class UMovementController * MovementController;
 
 	FRotator FreeRotation;
 

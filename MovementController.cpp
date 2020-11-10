@@ -1,17 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MovementCharacter.h"
+#include "MovementController.h"
 #include "MovementGravityAffected.h"
 
 
-void UMovementCharacter::BeginPlay() {
+void UMovementController::BeginPlay() {
 
 	UMovementGravityAffected * MovementGravityAffected = GetOwner()->FindComponentByClass<UMovementGravityAffected>();
-	MovementGravityAffected->OnReceiveImpulse.AddDynamic(this, &UMovementCharacter::ReceiveImpulse);
+	MovementGravityAffected->OnReceiveImpulse.AddDynamic(this, &UMovementController::ReceiveImpulse);
 }
 
-void UMovementCharacter::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UMovementController::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 
 	FHitResult Hit;
@@ -23,6 +23,6 @@ void UMovementCharacter::TickComponent(float DeltaTime, enum ELevelTick TickType
 	}
 }
 
-void UMovementCharacter::ReceiveImpulse(const FVector &Impulse) {
+void UMovementController::ReceiveImpulse(const FVector &Impulse) {
 	GravityInertia += Impulse;
 }
