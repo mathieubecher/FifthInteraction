@@ -8,6 +8,7 @@
 #include "GameFramework/Pawn.h"
 #include "MovementGravityAffected.h"
 #include "MovementController.h"
+#include "Gravity/GravityComponent.h"
 #include "CharacterController.generated.h"
 
 UCLASS()
@@ -31,6 +32,7 @@ protected:
 public:
 	// Sets default values for this pawn's properties
 	ACharacterController();
+	UGravityComponent * LocalGravity;
 
 protected:
 	// Called when the game starts or when spawned
@@ -40,6 +42,9 @@ protected:
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
 	void MoveUp(float AxisValue);
+
+	FVector LastUp;
+	float TimerUp;
 
 public:	
 

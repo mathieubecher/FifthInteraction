@@ -45,15 +45,28 @@ void ACharacterController::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 // Called every frame
 void ACharacterController::Tick(float DeltaTime)
 {
+	if (LocalGravity) {
+		TimerUp -= DeltaTime;
+		if (TimerUp < 0) TimerUp = 0;
+		FVector Up = FMath::Lerp(-LocalGravity->GetAttractVector(GetActorLocation()), LastUp, TimerUp);
+		FVector Forward = FVector::CrossProduct(GetActorRightVector(), Up);
+		FRotator Rot = UKismetMathLibrary::MakeRotFromXZ(Forward, Up);
+		RootComponent->SetWorldRotation(Rot);
+	}
 	Super::Tick(DeltaTime);
+
 	AddActorLocalRotation(FreeRotation);
 }
 
 void ACharacterController::EnterGravity(UGravityComponent * NewGravity) {
 	UE_LOG(LogTemp, Log, TEXT("Enter Gravity Event"));
+	LocalGravity = NewGravity;
+	LastUp = GetActorUpVector();
+	TimerUp = 1;
 }
 void ACharacterController::ExitGravity(UGravityComponent * NewGravity) {
 	UE_LOG(LogTemp, Log, TEXT("Exit Gravity Event"));
+	LocalGravity = NULL;
 }
 
 void ACharacterController::TurnAtRate(float Rate) {
@@ -61,7 +74,8 @@ void ACharacterController::TurnAtRate(float Rate) {
 }
 
 void ACharacterController::LookUpAtRate(float Rate) {
-	FreeRotation.Pitch = Rate;
+	if(LocalGravity) FreeRotation.Pitch = 0;
+	else FreeRotation.Pitch = Rate;
 }
 
 
