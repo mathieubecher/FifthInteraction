@@ -11,6 +11,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnterGravity, UGravityComponent*, NewGravity);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExitGravity, UGravityComponent*, NewGravity);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FReceiveImpulse, const FVector&, Impulse);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FIFTHINTERACTION_API UMovementGravityAffected : public UActorComponent
@@ -21,17 +22,26 @@ protected:
 	UPROPERTY()
 	UPrimitiveComponent * Physics;
 	class AWorldPhysicsVolume * Volume;
+
+	bool IsPhysics;
 public:	
 	// Sets default values for this component's properties
 	UMovementGravityAffected();
 	UPROPERTY(BlueprintReadWrite)
 	class UGravityComponent * LocalGravity;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool Ignore;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Mass = 500;
 
 	UPROPERTY(BlueprintAssignable)
 	FEnterGravity OnEnterGravity;
 	UPROPERTY(BlueprintAssignable)
 	FExitGravity OnExitGravity;
+	UPROPERTY(BlueprintAssignable)
+	FReceiveImpulse OnReceiveImpulse;
 
 public:	
 	// Called every frame

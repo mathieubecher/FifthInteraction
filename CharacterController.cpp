@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "CharacterController.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ACharacterController::ACharacterController()
@@ -19,19 +19,22 @@ ACharacterController::ACharacterController()
 	Gravity = CreateDefaultSubobject<UMovementGravityAffected>(TEXT("Gravity"));
 	Gravity->OnEnterGravity.AddDynamic(this, &ACharacterController::EnterGravity);
 	Gravity->OnExitGravity.AddDynamic(this, &ACharacterController::ExitGravity);
+
+	MovementCharacter = CreateDefaultSubobject<UMovementCharacter>(TEXT("MovementComponent"));
+	MovementCharacter->UpdatedComponent = RootComponent;
 }
 
 // Called when the game starts or when spawned
 void ACharacterController::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Log, TEXT("Test create Pawn"));
 	
 }
 // Called to bind functionality to input
 void ACharacterController::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	check(PlayerInputComponent);
+	//UE_LOG(LogTemp, Log, TEXT("Input create Pawn"));
 	PlayerInputComponent->BindAxis("Turn", this, &ACharacterController::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &ACharacterController::LookUpAtRate);
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACharacterController::MoveForward);
@@ -43,7 +46,7 @@ void ACharacterController::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 void ACharacterController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	AddActorLocalRotation(FreeRotation);
 }
 
 void ACharacterController::EnterGravity(UGravityComponent * NewGravity) {
@@ -54,23 +57,31 @@ void ACharacterController::ExitGravity(UGravityComponent * NewGravity) {
 }
 
 void ACharacterController::TurnAtRate(float Rate) {
-	AddActorLocalRotation(FRotator(0, Rate, 0));
+	FreeRotation.Yaw = Rate;
 }
 
 void ACharacterController::LookUpAtRate(float Rate) {
-	AddActorLocalRotation(FRotator(Rate, 0, 0));
-
+	FreeRotation.Pitch = Rate;
 }
 
 
 void ACharacterController::MoveForward(float AxisValue) {
-
+	if (MovementCharacter && (MovementCharacter->UpdatedComponent == RootComponent))
+	{
+		MovementCharacter->AddInputVector(FVector::ForwardVector * AxisValue);
+	}
 }
 
 void ACharacterController::MoveRight(float AxisValue) {
-
+	if (MovementCharacter && (MovementCharacter->UpdatedComponent == RootComponent))
+	{
+		MovementCharacter->AddInputVector(FVector::RightVector * AxisValue);
+	}
 }
 
 void ACharacterController::MoveUp(float AxisValue) {
-
+	if (MovementCharacter && (MovementCharacter->UpdatedComponent == RootComponent))
+	{
+		MovementCharacter->AddInputVector(FVector::UpVector * AxisValue);
+	}
 }

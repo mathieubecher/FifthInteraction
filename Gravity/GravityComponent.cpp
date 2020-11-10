@@ -61,7 +61,7 @@ FVector UGravityComponent::GetGravity(FVector Position, float ActorMass)
 	float Distance;
 
 	Direction = GetAttractVector(Position);
-	Distance = FVector::DotProduct(Position - GetOwner()->GetActorLocation(), Direction);
+	Distance = FVector::DotProduct(Position - GetOwner()->GetActorLocation(), Direction)/100;
 
 	float Magnitude = Mass * ActorMass / (Distance * Distance);
 	return Direction * Magnitude;

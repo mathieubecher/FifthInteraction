@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Pawn.h"
 #include "MovementGravityAffected.h"
+#include "MovementCharacter.h"
 #include "CharacterController.generated.h"
 
 UCLASS()
@@ -21,6 +22,12 @@ protected:
 	UCameraComponent* Camera;
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 	class UMovementGravityAffected * Gravity;
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+	class UMovementCharacter * MovementCharacter;
+
+	FRotator FreeRotation;
+
 public:
 	// Sets default values for this pawn's properties
 	ACharacterController();
@@ -35,9 +42,9 @@ protected:
 	void MoveUp(float AxisValue);
 
 public:	
-	// Called every frame
+
 	virtual void Tick(float DeltaTime) override;
-	// Called to bind functionality to input
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()

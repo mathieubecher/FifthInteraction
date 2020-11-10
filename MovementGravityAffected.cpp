@@ -10,9 +10,12 @@ UMovementGravityAffected::UMovementGravityAffected()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+	
 }
 void UMovementGravityAffected::BeginPlay() {
 	Physics = GetOwner()->FindComponentByClass<UPrimitiveComponent>();
+	IsPhysics = (Physics && Physics->IsSimulatingPhysics());
+	if (IsPhysics) Mass = Physics->GetMass();
 	Volume = Cast<AWorldPhysicsVolume>(GetWorld()->GetDefaultPhysicsVolume());
 }
 
@@ -20,11 +23,17 @@ void UMovementGravityAffected::BeginPlay() {
 void UMovementGravityAffected::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	FVector Impulse;
-	if (LocalGravity) Impulse = LocalGravity->GetGravity(GetOwner()->GetActorLocation(), Physics->GetMass());
-	else Impulse = Volume->GetGravity(GetOwner(), Physics->GetMass());
+	if (Ignore) return;
 	
-	Physics->AddImpulse(Impulse * DeltaTime, NAME_None, true);
+
+	FVector Impulse;
+	if (LocalGravity) Impulse = LocalGravity->GetGravity(GetOwner()->GetActorLocation(), Mass);
+	else Impulse = Volume->GetGravity(GetOwner(), Mass);
+
+	if (IsPhysics) Physics->AddImpulse(Impulse * DeltaTime);
+	else {	
+		OnReceiveImpulse.Broadcast(Impulse / Mass * DeltaTime * DeltaTime);
+	}
 }
 
 
