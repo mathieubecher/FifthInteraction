@@ -28,13 +28,11 @@ ACharacterController::ACharacterController()
 void ACharacterController::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 // Called to bind functionality to input
 void ACharacterController::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	check(PlayerInputComponent);
-	//UE_LOG(LogTemp, Log, TEXT("Input create Pawn"));
 	PlayerInputComponent->BindAxis("Turn", this, &ACharacterController::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &ACharacterController::LookUpAtRate);
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACharacterController::MoveForward);
@@ -45,6 +43,7 @@ void ACharacterController::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 // Called every frame
 void ACharacterController::Tick(float DeltaTime)
 {
+	//TODO Change
 	if (LocalGravity) {
 		TimerUp -= DeltaTime;
 		if (TimerUp < 0) TimerUp = 0;
@@ -53,14 +52,16 @@ void ACharacterController::Tick(float DeltaTime)
 		FRotator Rot = UKismetMathLibrary::MakeRotFromXZ(Forward, Up);
 		RootComponent->SetWorldRotation(Rot);
 	}
-	Super::Tick(DeltaTime);
-
 	AddActorLocalRotation(FreeRotation);
+
+	Super::Tick(DeltaTime);
 }
 
 void ACharacterController::EnterGravity(UGravityComponent * NewGravity) {
 	UE_LOG(LogTemp, Log, TEXT("Enter Gravity Event"));
 	LocalGravity = NewGravity;
+
+	//TODO Change
 	LastUp = GetActorUpVector();
 	TimerUp = 1;
 }

@@ -13,6 +13,7 @@ UMovementGravityAffected::UMovementGravityAffected()
 	
 }
 void UMovementGravityAffected::BeginPlay() {
+	Super::BeginPlay();
 	Physics = GetOwner()->FindComponentByClass<UPrimitiveComponent>();
 	IsPhysics = (Physics && Physics->IsSimulatingPhysics());
 	if (IsPhysics) Mass = Physics->GetMass();
